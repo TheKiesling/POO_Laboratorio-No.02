@@ -46,9 +46,15 @@ public class Controlador {
                 
                 //Inicializar (crear una nueva RAM)
                 if (opcion == 1){
-                    String tipo = vista.pedirTipo(); //
-                    int tamano = vista.pedirTamano();
-                    ram = new RAM(tipo, tamano);
+                    String tipo = vista.pedirTipo(); 
+
+                    if (tipo == "SDR"){
+                        int tamano = vista.pedirTamano();
+                        ram = new RAM(tipo, tamano);
+                    }
+
+                    else 
+                        ram = new RAM(tipo);
                 }
 
                 //Ingresar Programas
