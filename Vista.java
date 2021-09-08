@@ -292,4 +292,32 @@ public class Vista {
         return tiempo;
     }
     //****************************************************************
+
+    /*****************************************************************
+     * pedirPrograma: pide el nombre de un programa a ingresar
+     * @return programa
+     * @throws Exception
+     */
+    public String pedirPrograma() throws Exception{
+        String programa = "";
+        boolean bandera = false;
+        
+        try{     
+            System.out.println("Ingrese el nombre del programa que quiere saber el espacio de bloques que ocupa");
+            
+            while (!bandera){ //Ciclo para evaluar si se ingresó un nombre de programa valido
+                programa = scan.nextLine();
+                System.out.println();
+                if (programa.equals("") || programa.equals(";")) //Excepciones
+                    System.out.println("ERROR: Ingrese un programa valido"); 
+                else 
+                    bandera = true;
+            }
+        } catch (Exception e){ //Captura cualquier error que no sea de input
+            String s = "Ocurrió un error con scan.nextInt() " +  programa + ": " + e.toString();
+            throw new Exception(s);
+        }
+        return programa;
+    }
+    //****************************************************************
 }
