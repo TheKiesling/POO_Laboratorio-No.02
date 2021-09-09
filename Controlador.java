@@ -62,7 +62,8 @@ public class Controlador {
                     String nombre = vista.pedirNombre();
                     int espacio = vista.pedirEspacio();
                     int tiempo = vista.pedirTiempo();
-                    ram.ingresarPrograma(nombre,espacio, tiempo);
+                    programa = new Programa(nombre, espacio, tiempo);
+                    ram.ingresarPrograma(programa);
                 }
                 
                 //Cantidad de memoria RAM
