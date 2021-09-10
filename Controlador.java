@@ -21,13 +21,13 @@ public class Controlador {
 
     //---------------------------MÉTODOS-----------------------------
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         //Instancia de objetos
-        RAM ram;
+        RAM ram =null;
         Programa programa;
         Vista vista = new Vista();
 
-        try{
+        //try{
             //Saludar al usuario
             vista.bienvenida();
 
@@ -35,12 +35,13 @@ public class Controlador {
             boolean abrir = vista.abrirArchivo();
                 
             //Leer Archivo
+            /*
             if (abrir){
                 ram.leerArchivo();
-            } 
+            } */
 
             int opcion = -1;
-            while (opcion != 7){
+            while (opcion != 8){
                 //Despliegue de las opciones del menú y su previa lectura de dicha opción
                 opcion = vista.menuOpciones();
                 
@@ -48,7 +49,7 @@ public class Controlador {
                 if (opcion == 1){
                     String tipo = vista.pedirTipo(); 
 
-                    if (tipo == "SDR"){
+                    if (tipo.equals("SDR")){
                         int tamano = vista.pedirTamano();
                         ram = new RAM(tipo, tamano);
                     }
@@ -63,9 +64,10 @@ public class Controlador {
                     int espacio = vista.pedirEspacio();
                     int tiempo = vista.pedirTiempo();
                     programa = new Programa(nombre, espacio, tiempo);
-                    ram.ingresarPrograma(programa);
+                    boolean ingreso = ram.ingresarPrograma(programa);
+                    vista.ingresarPrograma(ingreso);
                 }
-                
+                /*
                 //Cantidad de memoria RAM
                 if (opcion == 3){
                     int[] memoria = ram.cantidadMemoria();
@@ -91,14 +93,19 @@ public class Controlador {
                     vista.estadoMemoria(estado);
                 }
 
+                //Ciclo de Reloj
+                if (opcion == 7){
+                    ram.cicloReloj();
+                }
+*/
                 //Salir
-                if(opcion == 7){
+                if(opcion == 8){
                     vista.despedida();
                 }
             }
-        } catch (Exception e){
+        /*} catch (Exception e){
             String s = e.getMessage();
             vista.error(s);
-        }
+        }*/
     }
 }

@@ -8,6 +8,7 @@
 #      #    ########   ########   #######   ########   #######   #      ##    #########
 */
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.io.File;
@@ -33,7 +34,7 @@ public class RAM {
     private Programa programa;
     private ArrayList <Programa> DDR;
     private Programa[] SDR;
-    private Queue <Programa> cola;
+    private ArrayDeque<Programa> cola = new ArrayDeque<>();
 
     //---------------------------MÉTODOS-----------------------------
     /****************************************************************
@@ -58,6 +59,15 @@ public class RAM {
         int bloques = bloquesMemoria(4);
         this.tamano = bloques;
         DDR = new ArrayList <Programa>(tamano);
+        for (int i = 0; i < this.tamano; i++){ //Añadir nulls a los nuevos espacios
+            DDR.add(null);
+        }
+        System.out.println("####");
+                for (int i = 0; i < DDR.size(); i++) {
+                    System.out.println(DDR.get(i));
+                }
+        System.out.println("####");
+        System.out.println(DDR.size());
     }
     //***************************************************************
 
@@ -72,25 +82,25 @@ public class RAM {
     }
     //***************************************************************
 
-    public boolean ingresarPrograma(Programa programa){
+    public boolean ingresarPrograma(Programa programa) throws Exception{
         int espacio = programa.getEspacio();
-        int bloques_programa = bloquesMemoria(espacio);
+        double bloques = espacio/64;
+        double bloques_programa = Math.ceil(bloques);
         boolean ingreso = false;
         boolean bandera = false;
 
+        //try{
         if (tipo.equals("SDR")){ //Memoria SDR
             int espacio_disponible = 0;
             for (int i = 0; i < SDR.length; i++) //Ciclo para ver el espacio disponible
-                if (SDR[i] != null)
+                if (SDR[i] == null)
                     espacio_disponible++;
-            
             if (bloques_programa <= espacio_disponible){ //Si hay espacio
-                for (int i = 0; i < SDR.length; i++){
-                    if (SDR[i] == null) //Ver en que partes de la memoria hay espacio
-                        while (bloques_programa != 0){
-                            SDR[i] = programa; //Agregar el programa
-                            bloques_programa--; //Hasta que no quede ningún programa
-                        }
+                for (int i = 0; i < SDR.length && bloques_programa != 0; i++){
+                    if (SDR[i] == null){ //Ver en que partes de la memoria hay espacio
+                        SDR[i] = programa; //Agregar el programa
+                        bloques_programa--; //Hasta que no quede ningún programa
+                    }
                 }
                 ingreso = true; //Si se pudo ingresar
             }
@@ -98,20 +108,31 @@ public class RAM {
                 cola.add(programa); //A la cola de espera :(
         }
 
+        System.out.println(cola);
+
         if (tipo.equals("DDR")){ //Memoria DDR
+             
             while(!bandera){ //Mientras se sepa si se pudo ingresar o no
                 int espacio_disponible = 0;
+
+                System.out.println("------");
+                for (int i = 0; i < DDR.size(); i++) {
+                    System.out.println(DDR.get(i));
+                }
+                System.out.println("-----");
+
                 for (int i = 0; i < DDR.size(); i++) //Ciclo para ver el espacio disponible
-                    if (DDR.get(i) != null)
+                    if (DDR.get(i) == null)
                         espacio_disponible++;
 
+                System.out.println("Espacio: " + espacio_disponible);
+                System.out.println("Bloques "+ bloques_programa);
                 if (bloques_programa <= espacio_disponible){ //Si hay espacio
-                    for (int i = 0; i < DDR.size(); i++){
-                        if (DDR.get(i) == null) //Ver en que partes de la memoria hay espacio
-                            while (bloques_programa != 0){
-                                DDR.set(i, programa); //Agregar el programa
-                                bloques_programa--; //Hasta que no quede ningún programa
-                            }
+                    for (int i = 0; i < DDR.size() && bloques_programa != 0; i++){
+                        if (DDR.get(i) == null){ //Ver en que partes de la memoria hay espacio
+                            DDR.set(i, programa); //Agregar el programa
+                            bloques_programa--; //Hasta que no quede ningún programa
+                        }
                     }
                     bandera = true; //Si se sabe que se pudo ingresar
                     ingreso = true; //Si se pudo ingresar
@@ -131,7 +152,15 @@ public class RAM {
 
                 }
             }
+            System.out.println(DDR.size());
+            for (int i = 0; i < DDR.size(); i++) {
+                System.out.println(DDR.get(i));
+            }
         }
+        /*} catch (Exception e){
+            String s = "RAM.ingresarPrograma " + e.toString();
+			throw new Exception(s);
+        }*/
 
         return ingreso;
     }

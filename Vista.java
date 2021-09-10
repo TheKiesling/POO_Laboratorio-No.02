@@ -94,7 +94,7 @@ public class Vista {
      */
     public int menuOpciones() throws Exception, InputMismatchException{
         int opcion = -1;
-        boolean bandera = true;
+        boolean bandera = false;
 
         try{
             //Despliegue de menú de opciones  
@@ -105,12 +105,13 @@ public class Vista {
             System.out.println("4. Ver programas y sus propiedades");
             System.out.println("5. Espacios que ocupa un programa en particular");
             System.out.println("6. Estado de la memoria RAM");
-            System.out.println("7. Guardar y Salir\n\n");
+            System.out.println("7. Ciclo de reloj");
+            System.out.println("8. Salir\n\n");
 
             while (!bandera){ //Ciclo para evaluar si se ingresó una opcion válida
                 opcion = Integer.parseInt(scan.nextLine());
                 System.out.println();
-                if (opcion > 0 && opcion <= 7) //Opciones válidas
+                if (opcion > 0 && opcion <= 8) //Opciones válidas
                     bandera = true;
                 else{ 
                     System.out.println("ERROR: Ingrese una de las opciones indicadas anteriormente"); 
@@ -271,7 +272,7 @@ public class Vista {
         boolean bandera = false;
         
         try{
-            System.out.println("Ingrese la ubicacion del parqueo (Techado/Aereo)");
+            System.out.println("Ingrese el tiempo de ejecución del programa en ciclos de reloj");
             
             while (!bandera){ //Ciclo para evaluar si se ingresó un tiempo de programa valido
                 tiempo = Integer.parseInt(scan.nextLine());
@@ -320,4 +321,11 @@ public class Vista {
         return programa;
     }
     //****************************************************************
+
+    public void ingresarPrograma(boolean ingreso){
+        if (ingreso)
+            System.out.println("Ingreso exitoso del programa");
+        else
+            System.out.println("El programa no se puede ejecutar en este momento, ira a la cola de espera");
+    }
 }
