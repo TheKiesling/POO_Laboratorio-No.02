@@ -328,4 +328,10 @@ public class Vista {
         else
             System.out.println("El programa no se puede ejecutar en este momento, ira a la cola de espera");
     }
+
+    public void cantidadMemoria(int[] cantidadMemoria){
+        System.out.println("La cantidad de memoria total en bloques es : " + cantidadMemoria[0]);
+        System.out.println("La cantidad de memoria disponible en bloques es: " + cantidadMemoria[1]);
+        System.out.println("La cantidad de memoria en uso en bloques es: " + cantidadMemoria[2]);
+    }
 }

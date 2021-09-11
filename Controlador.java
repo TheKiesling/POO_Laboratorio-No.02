@@ -31,14 +31,7 @@ public class Controlador {
             //Saludar al usuario
             vista.bienvenida();
 
-            //Verificar si se quiere abrir el archivo o no
-            boolean abrir = vista.abrirArchivo();
-                
-            //Leer Archivo
-            /*
-            if (abrir){
-                ram.leerArchivo();
-            } */
+            
 
             int opcion = -1;
             while (opcion != 8){
@@ -60,6 +53,15 @@ public class Controlador {
 
                 //Ingresar Programas
                 if (opcion == 2){
+                //Verificar si se quiere abrir el archivo o no
+                boolean abrir = vista.abrirArchivo();
+                
+                //Leer Archivo
+                /*
+                if (abrir){
+                    ram.leerArchivo();
+                } */
+
                     String nombre = vista.pedirNombre();
                     int espacio = vista.pedirEspacio();
                     int tiempo = vista.pedirTiempo();
@@ -67,13 +69,13 @@ public class Controlador {
                     boolean ingreso = ram.ingresarPrograma(programa);
                     vista.ingresarPrograma(ingreso);
                 }
-                /*
+                
                 //Cantidad de memoria RAM
                 if (opcion == 3){
                     int[] memoria = ram.cantidadMemoria();
                     vista.cantidadMemoria(memoria);
                 }
-
+                /*
                 //Ver programas y sus propiedades
                 if (opcion == 4){
                     String[] programas = ram.estadosProgramas();
