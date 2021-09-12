@@ -234,8 +234,8 @@ public class Vista {
      * @throws Exception
      * @throws InputMismatchException
      */
-    public int pedirEspacio() throws Exception, InputMismatchException{
-        int espacio = 0;
+    public double pedirEspacio() throws Exception, InputMismatchException{
+        double espacio = 0;
         boolean bandera = false;
         
         try{
@@ -322,6 +322,10 @@ public class Vista {
     }
     //****************************************************************
 
+    /**
+     * 
+     * @param ingreso
+     */
     public void ingresarPrograma(boolean ingreso){
         if (ingreso)
             System.out.println("Ingreso exitoso del programa");
@@ -330,8 +334,13 @@ public class Vista {
     }
 
     public void cantidadMemoria(int[] cantidadMemoria){
-        System.out.println("La cantidad de memoria total en bloques es : " + cantidadMemoria[0]);
-        System.out.println("La cantidad de memoria disponible en bloques es: " + cantidadMemoria[1]);
-        System.out.println("La cantidad de memoria en uso en bloques es: " + cantidadMemoria[2]);
+        System.out.println("La cantidad de memoria total es : " + cantidadMemoria[0] + " MB");
+        System.out.println("La cantidad de memoria disponible en bloques es: " + cantidadMemoria[1] + " MB");
+        System.out.println("La cantidad de memoria en uso en bloques es: " + cantidadMemoria[2] + " MB");
+    }
+
+    public void estadosProgramas(String[] programas){
+        System.out.println("Los programas en ejecucion son:" + programas[0]);
+        System.out.println("Los programas en cola son:" + programas[1]);
     }
 }

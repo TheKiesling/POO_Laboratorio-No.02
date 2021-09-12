@@ -10,6 +10,7 @@
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
 import java.io.File;
 import java.io.FileReader;
@@ -35,6 +36,7 @@ public class RAM {
     private ArrayList <Programa> DDR;
     private Programa[] SDR;
     private ArrayDeque<Programa> cola = new ArrayDeque<>();
+    ArrayList<String>  ejecucion = new ArrayList<String>();
 
     //---------------------------MÉTODOS-----------------------------
     /****************************************************************
@@ -76,10 +78,17 @@ public class RAM {
     }
     //***************************************************************
 
+    /****************************************************************
+     * ingresarPrograma: Crea un programa y verifica si puede ingresar a la memoria RAM o se queda en la lista de espera. 
+     * Retorna true si pudo entrar y false, si no pudo.
+     * @param programa
+     * @return ingreso
+     * @throws Exception
+     */
     public boolean ingresarPrograma(Programa programa) throws Exception{
-        int espacio = programa.getEspacio();
+        double espacio = programa.getEspacio();
         double bloques = espacio/64;
-        double bloques_programa = Math.ceil(bloques);
+        double bloques_programa = Math.ceil(bloques); 
         boolean ingreso = false;
         boolean bandera = false;
 
@@ -131,6 +140,7 @@ public class RAM {
                         }
                         else{ //El tamaño ya es el limite
                             cola.add(programa); //A la cola de espera :(
+                            //-------------------------------------------------------------------------------------------Reducir tamaño nuevamente
                             bandera = true; //Si se sabe que no se pudo ingresar
                         }
 
@@ -143,12 +153,17 @@ public class RAM {
         }
         return ingreso;
     }
+    //***************************************************************
 
+    /****************************************************************
+     * cantidadMemoria: Instancia en un arreglo de ints el tamaño del arreglo de la memoria, el valor de los espacios vacíos y el valor de los espacios ocupados.
+     * @return cantidadMemoria
+     */
     public int[] cantidadMemoria(){
         int[] cantidadMemoria = new int[3];
 
         //Cantidad de memoria RAM total
-        cantidadMemoria[0] = this.tamano;
+        cantidadMemoria[0] = this.tamano*64;
 
         //Cantidad de memoria disponible
         int memoriaDisponible = 0;
@@ -166,13 +181,67 @@ public class RAM {
                             memoriaDisponible++;
         }
 
-        cantidadMemoria[1] = memoriaDisponible;
+        cantidadMemoria[1] = memoriaDisponible*64;
 
         //Cantidad de memoria en uso
         int memoriaUso = this.tamano - memoriaDisponible;
-        cantidadMemoria[2] = memoriaUso;
+        cantidadMemoria[2] = memoriaUso*64;
 
         return cantidadMemoria;
+    }
+    //***************************************************************
+
+    public String[] estadosProgramas(){
+        String programasEjecucion = "";
+        String programasCola = "";
+        String[] estadosProgramas = new String[2]; 
+        
+        //Programas en ejecución
+        if(tipo.equals("SDR")){
+            for (int i = 0; i < SDR.length; i++) {
+                if (SDR[i] != null){
+                    Programa programa_actual = SDR[i];
+                    String nombre = programa_actual.getNombre();
+                    ejecucion.add(nombre);
+                }   
+            }
+        }
+        if(tipo.equals("DDR")){
+            for (int i = 0; i < DDR.size(); i++) {
+                if (DDR.get(i) != null){
+                    Programa programa_actual = DDR.get(i);
+                    String nombre = programa_actual.getNombre();
+                    ejecucion.add(nombre);
+                }   
+            }
+        }
+        //Proceso para verificar que no se muestren programas repetidos 
+        Collections.sort(ejecucion);
+        String[] ejecucionString = new String[ejecucion.size()];
+        for (int i = 0; i < ejecucion.size(); i++){
+            ejecucionString[i] = ejecucion.get(i);
+        }
+        programasEjecucion = recorrerArreglo(ejecucionString);
+
+        //Programas en cola
+        for(Programa programa: cola){
+            String nombre = programa.getNombre();
+            programasCola += " " + nombre + ","; 
+        }
+
+        estadosProgramas[0] = programasEjecucion; estadosProgramas[1] = programasCola;
+        return estadosProgramas;
+    }
+
+    private String recorrerArreglo(String[] arreglo){
+        String cadena = "";
+        cadena += " " + arreglo[0]  + ","; 
+        for (int i = 1; i < arreglo.length; i++){
+                if (arreglo[i].equals(arreglo[i-1])){}
+                else 
+                    cadena += " " + arreglo[i]  + ",";
+        }
+        return cadena;
     }
 
 }

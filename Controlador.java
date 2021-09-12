@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /*
 #      #    #######    ########   #######   #          #######   ##      #    #########
 #     #        #       #          #         #             #      # #     #    #
@@ -31,8 +33,6 @@ public class Controlador {
             //Saludar al usuario
             vista.bienvenida();
 
-            
-
             int opcion = -1;
             while (opcion != 8){
                 //Despliegue de las opciones del menú y su previa lectura de dicha opción
@@ -63,7 +63,7 @@ public class Controlador {
                 } */
 
                     String nombre = vista.pedirNombre();
-                    int espacio = vista.pedirEspacio();
+                    double espacio = vista.pedirEspacio();
                     int tiempo = vista.pedirTiempo();
                     programa = new Programa(nombre, espacio, tiempo);
                     boolean ingreso = ram.ingresarPrograma(programa);
@@ -75,13 +75,13 @@ public class Controlador {
                     int[] memoria = ram.cantidadMemoria();
                     vista.cantidadMemoria(memoria);
                 }
-                /*
+                
                 //Ver programas y sus propiedades
                 if (opcion == 4){
                     String[] programas = ram.estadosProgramas();
                     vista.estadosProgramas(programas);
                 }
-
+                /*
                 //Espacios que ocupa un programa en particular
                 if (opcion == 5){
                     String programa_busqueda = vista.pedirPrograma();
@@ -105,8 +105,12 @@ public class Controlador {
                     vista.despedida();
                 }
             }
-        /*} catch (Exception e){
-            String s = e.getMessage();
+        /*}catch (NullPointerException e){
+            String s = "ERROR: NullPointerException. No puede ejecutar esta acción si antes no ha creado una memoria RAM";
+            vista.error(s);
+        }
+        catch (Exception e){
+            String s = "ERROR: " + e.getMessage();
             vista.error(s);
         }*/
     }

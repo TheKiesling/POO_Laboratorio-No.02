@@ -21,7 +21,7 @@ public class Programa {
 
     //---------------------------PROPIEDADES-------------------------
     private String nombre;
-    private int espacio;
+    private double espacio;
     private int tiempo;
 
     //---------------------------MÉTODOS-----------------------------
@@ -31,7 +31,7 @@ public class Programa {
      * @param espacio
      * @param tiempo
      */
-    public Programa(String nombre, int espacio, int tiempo){
+    public Programa(String nombre, double espacio, int tiempo){
         this.nombre = nombre;
         this.espacio = espacio;
         this.tiempo = tiempo;
@@ -51,7 +51,7 @@ public class Programa {
      * devuelve el espacio del programa
      * @return espacio
      */
-    public int getEspacio(){
+    public double getEspacio(){
         return espacio;
     }
     //***************************************************************
