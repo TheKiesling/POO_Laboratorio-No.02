@@ -81,14 +81,14 @@ public class Controlador {
                     String[] programas = ram.estadosProgramas();
                     vista.estadosProgramas(programas);
                 }
-                /*
+                
                 //Espacios que ocupa un programa en particular
                 if (opcion == 5){
                     String programa_busqueda = vista.pedirPrograma();
-                    int espacios = ram.espaciosPrograma();
-                    vista.espaciosPrograma(espacios);
+                    int espacios = ram.espaciosPrograma(programa_busqueda);
+                    vista.espaciosPrograma(espacios, programa_busqueda);
                 }
-
+/*
                 //Estado de la memoria RAM
                 if (opcion == 6){
                     String estado = ram.estadoMemoria();

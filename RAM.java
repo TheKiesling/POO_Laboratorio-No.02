@@ -148,7 +148,7 @@ public class RAM {
                 }
             }
         } catch (Exception e){
-            String s = "RAM.ingresarPrograma " + e.toString();
+            String s = "ERROR: RAM.ingresarPrograma " + e.toString();
 			throw new Exception(s);
         }
         return ingreso;
@@ -191,42 +191,50 @@ public class RAM {
     }
     //***************************************************************
 
-    public String[] estadosProgramas(){
+    public String[] estadosProgramas() throws Exception, ArrayIndexOutOfBoundsException{
         String programasEjecucion = "";
         String programasCola = "";
         String[] estadosProgramas = new String[2]; 
         
+        try{
         //Programas en ejecución
-        if(tipo.equals("SDR")){
-            for (int i = 0; i < SDR.length; i++) {
-                if (SDR[i] != null){
-                    Programa programa_actual = SDR[i];
-                    String nombre = programa_actual.getNombre();
-                    ejecucion.add(nombre);
-                }   
+            if(tipo.equals("SDR")){
+                for (int i = 0; i < SDR.length; i++) {
+                    if (SDR[i] != null){
+                        Programa programa_actual = SDR[i];
+                        String nombre = programa_actual.getNombre();
+                        ejecucion.add(nombre);
+                    }   
+                }
             }
-        }
-        if(tipo.equals("DDR")){
-            for (int i = 0; i < DDR.size(); i++) {
-                if (DDR.get(i) != null){
-                    Programa programa_actual = DDR.get(i);
-                    String nombre = programa_actual.getNombre();
-                    ejecucion.add(nombre);
-                }   
+            if(tipo.equals("DDR")){
+                for (int i = 0; i < DDR.size(); i++) {
+                    if (DDR.get(i) != null){
+                        Programa programa_actual = DDR.get(i);
+                        String nombre = programa_actual.getNombre();
+                        ejecucion.add(nombre);
+                    }   
+                }
             }
-        }
-        //Proceso para verificar que no se muestren programas repetidos 
-        Collections.sort(ejecucion);
-        String[] ejecucionString = new String[ejecucion.size()];
-        for (int i = 0; i < ejecucion.size(); i++){
-            ejecucionString[i] = ejecucion.get(i);
-        }
-        programasEjecucion = recorrerArreglo(ejecucionString);
+            //Proceso para verificar que no se muestren programas repetidos 
+            Collections.sort(ejecucion);
+            String[] ejecucionString = new String[ejecucion.size()];
+            for (int i = 0; i < ejecucion.size(); i++){
+                ejecucionString[i] = ejecucion.get(i);
+            }
+            programasEjecucion = recorrerArreglo(ejecucionString);
 
-        //Programas en cola
-        for(Programa programa: cola){
-            String nombre = programa.getNombre();
-            programasCola += " " + nombre + ","; 
+            //Programas en cola
+            for(Programa programa: cola){
+                String nombre = programa.getNombre();
+                programasCola += " " + nombre + ","; 
+            }
+        } catch (ArrayIndexOutOfBoundsException e){
+            String s = "ERROR: recorrido de String: " + e.toString() + " Tiene que ingresar minimo un programa para poder ejecutar esta opcion"; 
+            throw new ArrayIndexOutOfBoundsException(s);
+        } catch (Exception e){
+            String s = "ERROR: RAM.estadosProgramas: " + e.toString(); 
+            throw new Exception(s);
         }
 
         estadosProgramas[0] = programasEjecucion; estadosProgramas[1] = programasCola;
@@ -242,6 +250,34 @@ public class RAM {
                     cadena += " " + arreglo[i]  + ",";
         }
         return cadena;
+    }
+
+    public int espaciosPrograma(String programa_buscar){
+        int espacios = 0;
+
+        if (tipo.equals("SDR")){
+            for (int i = 0; i < SDR.length; i++) {
+                if (SDR[i] != null){
+                    Programa programa_actual = SDR[i];
+                    String nombre = programa_actual.getNombre();
+                    if (programa_buscar.equals(nombre))
+                        espacios++;
+                }
+            }   
+        }
+
+        if (tipo.equals("DDR")){
+            for (int i = 0; i < DDR.size(); i++){
+                if (DDR.get(i) != null){
+                    Programa programa_actual = DDR.get(i);
+                    String nombre = programa_actual.getNombre();
+                    if (programa_buscar.equals(nombre))
+                        espacios++;
+                }
+            }
+        }
+
+        return espacios;
     }
 
 }

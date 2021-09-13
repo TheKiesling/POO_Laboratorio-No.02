@@ -335,12 +335,16 @@ public class Vista {
 
     public void cantidadMemoria(int[] cantidadMemoria){
         System.out.println("La cantidad de memoria total es : " + cantidadMemoria[0] + " MB");
-        System.out.println("La cantidad de memoria disponible en bloques es: " + cantidadMemoria[1] + " MB");
-        System.out.println("La cantidad de memoria en uso en bloques es: " + cantidadMemoria[2] + " MB");
+        System.out.println("La cantidad de memoria disponible es: " + cantidadMemoria[1] + " MB");
+        System.out.println("La cantidad de memoria en uso es: " + cantidadMemoria[2] + " MB");
     }
 
     public void estadosProgramas(String[] programas){
         System.out.println("Los programas en ejecucion son:" + programas[0]);
         System.out.println("Los programas en cola son:" + programas[1]);
+    }
+
+    public void espaciosPrograma(int espacios, String programa){
+        System.out.println("Los espacios que ocupa " + programa + " son: " + espacios);
     }
 }
