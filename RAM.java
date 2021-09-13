@@ -140,7 +140,13 @@ public class RAM {
                         }
                         else{ //El tamaño ya es el limite
                             cola.add(programa); //A la cola de espera :(
-                            //-------------------------------------------------------------------------------------------Reducir tamaño nuevamente
+                            int espacio_ocupado = 0;
+                            for (int i = 0; i < DDR.size(); i++){
+                                if (DDR.get(i) != null)
+                                    espacio_ocupado++;
+                            }
+                            boolean tamano_correcto = false;
+                            
                             bandera = true; //Si se sabe que no se pudo ingresar
                         }
 
@@ -278,6 +284,38 @@ public class RAM {
         }
 
         return espacios;
+    }
+
+    public String estadoMemoria(){
+        String estadoMemoria = "";
+
+        if(tipo.equals("SDR")){
+            for (int i = 0; i < SDR.length; i++) {
+                if (SDR[i] != null){
+                    Programa programa_actual = SDR[i];
+                    String nombre = programa_actual.getNombre();
+                    estadoMemoria += "|   " + nombre + "   |";
+                }
+                else
+                    estadoMemoria += "|   " + "vacio" + "   |";    
+            }
+        }
+        if(tipo.equals("DDR")){
+            for (int i = 0; i < DDR.size(); i++) {
+                if (DDR.get(i) != null){
+                    Programa programa_actual = DDR.get(i);
+                    String nombre = programa_actual.getNombre();
+                    estadoMemoria += "|   " + nombre + "   |";
+                }
+                else
+                    estadoMemoria += "|   " + "vacio" + "   |";   
+            }
+        }
+        return estadoMemoria;
+    }
+
+    public void cicloReloj(){
+
     }
 
 }

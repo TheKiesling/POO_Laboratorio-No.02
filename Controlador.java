@@ -88,13 +88,13 @@ public class Controlador {
                     int espacios = ram.espaciosPrograma(programa_busqueda);
                     vista.espaciosPrograma(espacios, programa_busqueda);
                 }
-/*
+
                 //Estado de la memoria RAM
                 if (opcion == 6){
                     String estado = ram.estadoMemoria();
                     vista.estadoMemoria(estado);
                 }
-
+/*
                 //Ciclo de Reloj
                 if (opcion == 7){
                     ram.cicloReloj();

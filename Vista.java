@@ -347,4 +347,8 @@ public class Vista {
     public void espaciosPrograma(int espacios, String programa){
         System.out.println("Los espacios que ocupa " + programa + " son: " + espacios);
     }
+
+    public void estadoMemoria(String estado){
+        System.out.println(estado);
+    }
 }
