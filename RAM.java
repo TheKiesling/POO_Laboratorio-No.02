@@ -133,7 +133,7 @@ public class RAM {
                         int espacio_limite = bloquesMemoria(64); //Ver cuantos bloques de espacio puede aguantar (límite)
                         if (this.tamano < espacio_limite){ //Verificar si el tamano de la memoria es menor al del límite
                             this.tamano *=2; //Aumentar el doble del tamano
-                            for (int i = DDR.size(); i < this.tamano; i++){ //Añadir nulls a los nuevos espacios
+                            for (int i = (this.tamano/2); i < this.tamano; i++){ //Añadir nulls a los nuevos espacios
                                 DDR.add(null);
                             }
                         }
@@ -420,12 +420,9 @@ public class RAM {
                 recorridoCola = false;
             else{ //Proceso para agregar programas de la cola
                 for (Programa programa_cola: cola){
-                    double espacioPrograma = programa_cola.getEspacio();
-                    if ((espacioPrograma/64) <= this.tamano){
-                        recorridoCola = ingresarPrograma(programa_cola);
-                        cola.poll();
-                        if (!recorridoCola) break;
-                    }
+                    recorridoCola = ingresarPrograma(programa_cola);
+                    cola.poll();
+                    if (!recorridoCola) break;
                 }
             }
             //Proceso para reducir el tamano de la memoria que no está siendo usada

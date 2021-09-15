@@ -14,7 +14,7 @@ public class Programa {
     Nombre del programa: Vehiculo.java
     @version: 
         - Creación: 08/09/2021
-        - Última modificación: 08/09/2021
+        - Última modificación: 15/09/2021
 
     Clase que tendrá todos los datos del programa en cuestión.
     */

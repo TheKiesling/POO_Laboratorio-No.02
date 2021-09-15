@@ -14,7 +14,7 @@ public class Controlador {
     Nombre del programa: Controlador.java
     @version: 
         - Creación: 08/09/2021
-        - Última modificación: 08/09/2021
+        - Última modificación: 15/09/2021
 
     Clase que comunica el modelo con la vista y controla sus acciones
     */
@@ -27,7 +27,7 @@ public class Controlador {
         Programa programa;
         Vista vista = new Vista();
 
-        //try{
+        try{
             //Saludar al usuario
             vista.bienvenida();
 
@@ -103,13 +103,13 @@ public class Controlador {
                     vista.despedida();
                 }
             }
-        /*}catch (NullPointerException e){
+        }catch (NullPointerException e){
             String s = "ERROR: NullPointerException. No puede ejecutar esta acción si antes no ha creado una memoria RAM";
             vista.error(s);
         }
         catch (Exception e){
             String s = "ERROR: " + e.getMessage();
             vista.error(s);
-        }*/
+        }
     }
 }

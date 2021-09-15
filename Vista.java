@@ -17,7 +17,7 @@ public class Vista {
     Nombre del programa: Vista.java
     @version: 
         - Creación: 07/09/2021
-        - Última modificación: 07/09/2021
+        - Última modificación: 15/09/2021
 
     Clase que tiene como fin ser un sistema I/O para la manipulación del programa
      */ 
@@ -323,7 +323,7 @@ public class Vista {
     //****************************************************************
 
     /*****************************************************************
-     * 
+     * ingresarPrograma: Muestra en consola donde se asignó el programa que se acaba de procesar.
      * @param ingreso
      */
     public void ingresarPrograma(boolean ingreso){
@@ -332,27 +332,53 @@ public class Vista {
         else
             System.out.println("El programa no se puede ejecutar en este momento, ira a la cola de espera");
     }
+    //****************************************************************
 
+    /*****************************************************************
+     * cantidadMemoria: Muestra en consola la cantidad de memoria RAM total, disponible y en uso.
+     * @param cantidadMemoria
+     */
     public void cantidadMemoria(int[] cantidadMemoria){
         System.out.println("La cantidad de memoria total es : " + cantidadMemoria[0] + " MB");
         System.out.println("La cantidad de memoria disponible es: " + cantidadMemoria[1] + " MB");
         System.out.println("La cantidad de memoria en uso es: " + cantidadMemoria[2] + " MB");
     }
+    //****************************************************************
 
+    /*****************************************************************
+     * estadosProgramas: Muestra en consola los programas que se están ejecutando y cuales están en cola
+     * @param programas
+     */
     public void estadosProgramas(String[] programas){
         System.out.println("Los programas en ejecucion son:" + programas[0]);
         System.out.println("Los programas en cola son:" + programas[1]);
     }
+    //****************************************************************
 
+    /*****************************************************************
+     * espaciosPrograma: Muestra en consola los espacios que ocupa cierto programa
+     * @param espacios
+     * @param programa
+     */
     public void espaciosPrograma(int espacios, String programa){
         System.out.println("Los espacios que ocupa " + programa + " son: " + espacios);
     }
+    //****************************************************************
 
+    /*****************************************************************
+     * estadoMemoria: Muestra en consola el estado por bloque en la memoria
+     * @param estado
+     */
     public void estadoMemoria(String estado){
         System.out.println(estado);
     }
 
+    /*****************************************************************
+     * cicloReloj: Indica al usuario que se ha hecho un ciclo de reloj y los programas que han finalizado en ese ciclo (si es que terminaron)
+     * @param programasFinalizados
+     */
     public void cicloReloj(String programasFinalizados){
         System.out.println("Ciclo de reloj completado. Los programas que han terminado su proceso son:" + programasFinalizados);
     }
+    //****************************************************************
 }
