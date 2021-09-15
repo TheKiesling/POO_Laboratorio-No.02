@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /*
 #      #    #######    ########   #######   #          #######   ##      #    #########
 #     #        #       #          #         #             #      # #     #    #
@@ -25,7 +23,7 @@ public class Controlador {
 
     public static void main(String[] args) throws Exception{
         //Instancia de objetos
-        RAM ram =null;
+        RAM ram = null;
         Programa programa;
         Vista vista = new Vista();
 
@@ -49,22 +47,21 @@ public class Controlador {
 
                     else 
                         ram = new RAM(tipo);
+                    
+                    //Verificar si se quiere abrir el archivo o no
+                    boolean abrir = vista.abrirArchivo();
+                
+                    //Leer Archivo
+                    if (abrir){
+                        ram.leerArchivo();
+                    } 
                 }
 
                 //Ingresar Programas
                 if (opcion == 2){
-                //Verificar si se quiere abrir el archivo o no
-                boolean abrir = vista.abrirArchivo();
-                
-                //Leer Archivo
-                /*
-                if (abrir){
-                    ram.leerArchivo();
-                } */
-
                     String nombre = vista.pedirNombre();
                     double espacio = vista.pedirEspacio();
-                    int tiempo = vista.pedirTiempo();
+                    double tiempo = vista.pedirTiempo();
                     programa = new Programa(nombre, espacio, tiempo);
                     boolean ingreso = ram.ingresarPrograma(programa);
                     vista.ingresarPrograma(ingreso);
@@ -94,12 +91,13 @@ public class Controlador {
                     String estado = ram.estadoMemoria();
                     vista.estadoMemoria(estado);
                 }
-/*
+
                 //Ciclo de Reloj
                 if (opcion == 7){
-                    ram.cicloReloj();
+                    String programasFinalizados = ram.cicloReloj();
+                    vista.cicloReloj(programasFinalizados);
                 }
-*/
+
                 //Salir
                 if(opcion == 8){
                     vista.despedida();

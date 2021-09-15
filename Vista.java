@@ -267,8 +267,8 @@ public class Vista {
      * @throws Exception
      * @throws InputMismatchException
      */
-    public int pedirTiempo() throws Exception, InputMismatchException{
-        int tiempo = 0;
+    public double pedirTiempo() throws Exception, InputMismatchException{
+        double tiempo = 0;
         boolean bandera = false;
         
         try{
@@ -322,7 +322,7 @@ public class Vista {
     }
     //****************************************************************
 
-    /**
+    /*****************************************************************
      * 
      * @param ingreso
      */
@@ -350,5 +350,9 @@ public class Vista {
 
     public void estadoMemoria(String estado){
         System.out.println(estado);
+    }
+
+    public void cicloReloj(String programasFinalizados){
+        System.out.println("Ciclo de reloj completado. Los programas que han terminado su proceso son:" + programasFinalizados);
     }
 }

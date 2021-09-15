@@ -22,7 +22,7 @@ public class Programa {
     //---------------------------PROPIEDADES-------------------------
     private String nombre;
     private double espacio;
-    private int tiempo;
+    private double tiempo;
 
     //---------------------------MÉTODOS-----------------------------
     /****************************************************************
@@ -31,7 +31,7 @@ public class Programa {
      * @param espacio
      * @param tiempo
      */
-    public Programa(String nombre, double espacio, int tiempo){
+    public Programa(String nombre, double espacio, double tiempo){
         this.nombre = nombre;
         this.espacio = espacio;
         this.tiempo = tiempo;
@@ -60,8 +60,18 @@ public class Programa {
      * devuelve el tiempo de ejecución del programa
      * @return tiempo
      */
-    public int getTiempo(){
+    public double getTiempo(){
         return tiempo;
+    }
+    //***************************************************************
+
+    /****************************************************************
+     * setTiempo: Reduce el tiempo del programa en fracción al espacio usado
+     */
+    public void setTiempo(){
+        double bloques = this.espacio/64;
+        double bloques_programa = Math.ceil(bloques);
+        this.tiempo -= 1/bloques_programa;
     }
     //***************************************************************
 }

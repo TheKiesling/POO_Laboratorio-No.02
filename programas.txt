@@ -1,0 +1,9 @@
+Google Chrome;2070;8
+Firefox;64;16
+Zoom;320;60
+WhatsApp;128;8
+Telegram;128;8
+Visual Studio;320;60
+Mail;32;15
+Contactos;32;8
+Word;1024;10

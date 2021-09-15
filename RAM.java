@@ -11,7 +11,6 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Queue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -36,7 +35,7 @@ public class RAM {
     private ArrayList <Programa> DDR;
     private Programa[] SDR;
     private ArrayDeque<Programa> cola = new ArrayDeque<>();
-    ArrayList<String>  ejecucion = new ArrayList<String>();
+    
 
     //---------------------------MÉTODOS-----------------------------
     /****************************************************************
@@ -140,13 +139,31 @@ public class RAM {
                         }
                         else{ //El tamaño ya es el limite
                             cola.add(programa); //A la cola de espera :(
-                            int espacio_ocupado = 0;
-                            for (int i = 0; i < DDR.size(); i++){
-                                if (DDR.get(i) != null)
-                                    espacio_ocupado++;
-                            }
+
+                            //Proceso para reducir nuevamente el espacio que se aumentó de forma inutil
                             boolean tamano_correcto = false;
-                            
+                            int espacio_vacio = 0;
+                            while(!tamano_correcto){
+                                int espacio_ocupado = 0;
+                                for (int i = 0; i < DDR.size(); i++){
+                                    if (DDR.get(i) != null)
+                                        espacio_ocupado++;
+                                }
+                                
+                                if(this.tamano/2 > espacio_ocupado && this.tamano > bloquesMemoria(4)){
+                                    
+                                    for (int i = (this.tamano/2); i < this.tamano; i++){
+                                        if (DDR.get(i) == null)
+                                            espacio_vacio++;
+                                    }
+                                    this.tamano/=2;
+                                }
+                                else
+                                    tamano_correcto = true;
+                            }
+                            for (int i = 1024-1; i >=(1024-espacio_vacio); i--){
+                                DDR.remove(i);
+                            }
                             bandera = true; //Si se sabe que no se pudo ingresar
                         }
 
@@ -176,28 +193,35 @@ public class RAM {
         
         if (tipo.equals("SDR")){
             for (int i = 0; i < SDR.length; i++) {
-                if (SDR[i] == null)
+                if (SDR[i] != null)
                         memoriaDisponible++;
             }
         }
 
         if (tipo.equals("DDR")){
             for (int i = 0; i < DDR.size(); i++) 
-                        if (DDR.get(i) == null)
-                            memoriaDisponible++;
+                if (DDR.get(i) != null)
+                    memoriaDisponible++;
         }
 
-        cantidadMemoria[1] = memoriaDisponible*64;
+        cantidadMemoria[2] = memoriaDisponible*64;
 
         //Cantidad de memoria en uso
         int memoriaUso = this.tamano - memoriaDisponible;
-        cantidadMemoria[2] = memoriaUso*64;
+        cantidadMemoria[1] = memoriaUso*64;
 
         return cantidadMemoria;
     }
     //***************************************************************
 
+    /****************************************************************
+     * estadosProgramas: Concatena cada bloque de espacio a un String en donde su valor sea diferente a null, posteriormente retorna el vector
+     * @return estadosProgramas
+     * @throws Exception
+     * @throws ArrayIndexOutOfBoundsException
+     */
     public String[] estadosProgramas() throws Exception, ArrayIndexOutOfBoundsException{
+        ArrayList<String>  ejecucion = new ArrayList<String>();
         String programasEjecucion = "";
         String programasCola = "";
         String[] estadosProgramas = new String[2]; 
@@ -226,7 +250,8 @@ public class RAM {
             Collections.sort(ejecucion);
             String[] ejecucionString = new String[ejecucion.size()];
             for (int i = 0; i < ejecucion.size(); i++){
-                ejecucionString[i] = ejecucion.get(i);
+                if (ejecucion.get(i) != null)
+                    ejecucionString[i] = ejecucion.get(i);
             }
             programasEjecucion = recorrerArreglo(ejecucionString);
 
@@ -236,7 +261,7 @@ public class RAM {
                 programasCola += " " + nombre + ","; 
             }
         } catch (ArrayIndexOutOfBoundsException e){
-            String s = "ERROR: recorrido de String: " + e.toString() + " Tiene que ingresar minimo un programa para poder ejecutar esta opcion"; 
+            String s = "ERROR: recorrido de String: " + e.toString() + " Tiene que ingresar minimo un programa para poder ejecutar esta opcion o estar seguro de que hay al menos uno en ejecucion"; 
             throw new ArrayIndexOutOfBoundsException(s);
         } catch (Exception e){
             String s = "ERROR: RAM.estadosProgramas: " + e.toString(); 
@@ -246,18 +271,32 @@ public class RAM {
         estadosProgramas[0] = programasEjecucion; estadosProgramas[1] = programasCola;
         return estadosProgramas;
     }
+    //***************************************************************
 
+    /****************************************************************
+     * recorrerArreglo: recorre un arreglo en busca de elementos repetidos y los concatena solo una vez
+     * @param arreglo
+     * @return cadena
+     */
     private String recorrerArreglo(String[] arreglo){
         String cadena = "";
-        cadena += " " + arreglo[0]  + ","; 
-        for (int i = 1; i < arreglo.length; i++){
+        if (arreglo.length > 0){
+            cadena += " " + arreglo[0]  + ","; 
+            for (int i = 1; i < arreglo.length; i++){
                 if (arreglo[i].equals(arreglo[i-1])){}
                 else 
                     cadena += " " + arreglo[i]  + ",";
+            }
         }
         return cadena;
     }
+    //***************************************************************
 
+    /****************************************************************
+     * espaciosPrograma: Busca en el arreglo todas las posiciones que correspondan al nombre del programa y suma en una variable entera cada vez que encuentra el valor. Retorna dicha variable.
+     * @param programa_buscar
+     * @return espacios
+     */
     public int espaciosPrograma(String programa_buscar){
         int espacios = 0;
 
@@ -285,7 +324,12 @@ public class RAM {
 
         return espacios;
     }
+    //***************************************************************
 
+    /****************************************************************
+     * estadoMemoria: Concatenación de los bloques ocupados en la memoria (bloque diferente a null) y memoria libre (bloques iguales a null)
+     * @return estadoMemoria
+     */
     public String estadoMemoria(){
         String estadoMemoria = "";
 
@@ -294,10 +338,10 @@ public class RAM {
                 if (SDR[i] != null){
                     Programa programa_actual = SDR[i];
                     String nombre = programa_actual.getNombre();
-                    estadoMemoria += "|   " + nombre + "   |";
+                    estadoMemoria += "|" + "\t" + nombre + "\t" + "|"; //Espacios con programas
                 }
                 else
-                    estadoMemoria += "|   " + "vacio" + "   |";    
+                    estadoMemoria += "|" + "\t" + "vacio" + "\t" + "|"; //Espacios vacios 
             }
         }
         if(tipo.equals("DDR")){
@@ -305,17 +349,148 @@ public class RAM {
                 if (DDR.get(i) != null){
                     Programa programa_actual = DDR.get(i);
                     String nombre = programa_actual.getNombre();
-                    estadoMemoria += "|   " + nombre + "   |";
+                    estadoMemoria += "|" + "\t" + nombre + "\t" + "|"; //Espacios con programas
                 }
                 else
-                    estadoMemoria += "|   " + "vacio" + "   |";   
+                    estadoMemoria += "|" + "\t" + "vacio" + "\t" + "|"; //Espacios vacios 
             }
         }
         return estadoMemoria;
     }
+    //***************************************************************
 
-    public void cicloReloj(){
+    /****************************************************************
+     * cicloReloj: Reduce en 1 la propiedad de tiempo de cada programa y verifica si se puede retirar el programa e ingresar uno nuevo.
+     * @throws Exception
+     */
+    public String cicloReloj() throws Exception{
+        String programasFinalizados = "";
+        ArrayList <String> programas = new ArrayList <String>();
 
+        if(tipo.equals("SDR")){
+            for (int i = 0; i < SDR.length; i++) {
+                if (SDR[i] != null){
+                    Programa programa_actual = SDR[i];
+                    programa_actual.setTiempo(); //Reducir el tiempo de cada programa
+                }
+            }
+            for (int i = 0; i < SDR.length; i++) {
+                if (SDR[i] != null){
+                    Programa programa_actual = SDR[i];
+                    double tiempoPrograma = programa_actual.getTiempo();
+                    if (Math.round(tiempoPrograma) < 1){ //Si ya no tiene tiempo
+                        programas.add(SDR[i].getNombre());
+                        SDR[i] = null; //Eliminar el espacio que ocupaba el programa en el arreglo
+                        boolean recorridoCola = true;
+                        if (cola.isEmpty())
+                            recorridoCola = false;
+                        else{
+                            for (Programa programa_cola: cola){ //Ingresar programas de la cola
+                                double espacioPrograma = programa_cola.getEspacio();
+                                if ((espacioPrograma/64) <= this.tamano){
+                                    recorridoCola = ingresarPrograma(programa_cola);
+                                    cola.poll();
+                                    if (!recorridoCola) break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (tipo.equals("DDR")){
+            for (int i = 0; i < DDR.size(); i++) {
+                if (DDR.get(i) != null){
+                    Programa programa_actual = DDR.get(i);
+                    programa_actual.setTiempo(); //Reducir el tiempo de cada programa
+                }
+            }
+            for (int i = 0; i < DDR.size(); i++) {
+                if (DDR.get(i) != null){
+                    Programa programa_actual = DDR.get(i);
+                    double tiempoPrograma = programa_actual.getTiempo();
+                    if (Math.round(tiempoPrograma) < 1){ //Si ya no tiene tiempo
+                        programas.add(DDR.get(i).getNombre());
+                        DDR.set(i, null); //Eliminar el espacio que ocupaba el programa en el arreglo
+                    }
+                }
+            }
+            boolean recorridoCola = true;
+            if (cola.isEmpty())
+                recorridoCola = false;
+            else{ //Proceso para agregar programas de la cola
+                for (Programa programa_cola: cola){
+                    double espacioPrograma = programa_cola.getEspacio();
+                    if ((espacioPrograma/64) <= this.tamano){
+                        recorridoCola = ingresarPrograma(programa_cola);
+                        cola.poll();
+                        if (!recorridoCola) break;
+                    }
+                }
+            }
+            //Proceso para reducir el tamano de la memoria que no está siendo usada
+            boolean tamano_correcto = false;
+            int espacio_vacio = 0;
+            while(!tamano_correcto){
+                int espacio_ocupado = 0;
+                for (int j = 0; j < DDR.size(); j++){
+                    if (DDR.get(j) != null)
+                        espacio_ocupado++;
+                }
+                if(this.tamano/2 > espacio_ocupado && this.tamano > bloquesMemoria(4)){
+                    for (int j = (this.tamano/2); j < this.tamano; j++){
+                        if (DDR.get(j) == null)
+                            espacio_vacio++;
+                    }
+                    this.tamano/=2;
+                }
+                else
+                    tamano_correcto = true;
+            }
+            int tamano_actual = DDR.size();
+            for (int j = tamano_actual-1; j >=(tamano_actual-espacio_vacio); j--){
+                DDR.remove(j);
+            }
+        }
+
+        Collections.sort(programas);
+        String[] ejecucionString = new String[programas.size()];
+        for (int i = 0; i < programas.size(); i++){
+            if (programas.get(i) != null)
+                ejecucionString[i] = programas.get(i);
+        }
+        programasFinalizados = recorrerArreglo(ejecucionString);
+
+        return programasFinalizados;
     }
+    //***************************************************************
 
+    /****************************************************************
+     * leerArchivo: Lee un archivo .txt donde se encuentran todos los programas previos a la ejecución del programa
+     * @throws Exception
+     * @throws IOException
+     */
+    public void leerArchivo() throws Exception, IOException{
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(archivo));
+            String datos; String[] datos_separados = new String[7]; 
+            while ((datos = br.readLine()) != null){ //Lectura de archivo
+                datos_separados = datos.split(";");
+                String nombre = datos_separados[0]; 
+                double espacio = Double.parseDouble(datos_separados[1]); 
+                double tiempo = Double.parseDouble(datos_separados[2]);
+                Programa programa_archivo = new Programa(nombre, espacio, tiempo);
+                ingresarPrograma(programa_archivo);
+            }
+        }
+        catch (IOException e){
+            String s = "RAM.leerArchivo:" + e.toString() + " Error de lectura";
+			throw new Exception(s);
+        }
+        catch (Exception e){
+            String s = "ERROR: RAM.leerArchivo: " + e.toString(); 
+            throw new Exception(s);
+        }
+    }
+    //***************************************************************
 }
